@@ -44,14 +44,21 @@ sistema-aviao-beto/
 ## 🎯 Exemplos de Uso
 
 ### Menu Principal
-![Menu Principal](https://via.placeholder.com/600x300/2d3748/ffffff?text=Menu+Administrador)
+
 
 O sistema apresenta um menu administrativo onde você pode:
 - Ver voos disponíveis
 - Sair do sistema
 
+Exemplo de output:
+```
+=== Menu Administrador ===
+1 - Ver voos disponíveis
+0 - Sair
+```
+
 ### Lista de Voos Disponíveis
-![Voos Disponíveis](https://via.placeholder.com/600x400/4a5568/ffffff?text=Lista+de+Voos)
+
 
 Exemplo de output:
 ```
@@ -69,7 +76,7 @@ Exemplo de output:
 ```
 
 ### Menu do Voo Selecionado
-![Menu do Voo](https://via.placeholder.com/600x300/718096/ffffff?text=Menu+do+Voo)
+
 
 Para cada voo, você pode:
 1. Ver tripulação
@@ -78,7 +85,7 @@ Para cada voo, você pode:
 0. Voltar
 
 ### Informações da Tripulação
-![Tripulação](https://via.placeholder.com/600x300/38b2ac/ffffff?text=Informações+da+Tripulação)
+
 
 Exemplo de output:
 ```
@@ -90,7 +97,6 @@ Comissário 2: Maria Cecília Machado
 ```
 
 ### Modelo do Avião
-![Modelo do Avião](https://via.placeholder.com/600x200/805ad5/ffffff?text=Modelo+do+Avião)
 
 Exemplo de output:
 ```
@@ -99,7 +105,6 @@ Modelo do avião: Airbus A330
 ```
 
 ### Consulta de Assento
-![Consulta de Assento](https://via.placeholder.com/600x200/ed8936/ffffff?text=Consulta+de+Assento)
 
 Exemplo de output:
 ```
@@ -163,13 +168,12 @@ O sistema utiliza a biblioteca Faker para gerar:
 - Embraer E190, E195
 
 ### Validações
-- Verificação de assentos disponíveis
 - IDs de voos únicos
 - Validação de entrada do usuário
 
 ## 👥 Contribuição
 
-Este projeto foi desenvolvido como trabalho acadêmico do IFMS (Instituto Federal de Mato Grosso do Sul) para a disciplina de Programação.
+Este projeto foi desenvolvido como trabalho acadêmico do IFMS (Instituto Federal de Mato Grosso do Sul) para a disciplina de Paradigma Orientado a Objetos.
 
 ## 📄 Licença
 
@@ -177,7 +181,7 @@ Este projeto é desenvolvido para fins educacionais.
 
 ---
 
-**Desenvolvido por**: [Seu Nome]  
+**Desenvolvido por**: Nicolas Wolf  
 **Instituição**: IFMS - Instituto Federal de Mato Grosso do Sul  
-**Disciplina**: Programação  
+**Disciplina**: Paradigma Orientado a Objetos  
 **Ano**: 2025
