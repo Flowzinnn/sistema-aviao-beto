@@ -36,3 +36,23 @@ def generate_attendant() -> FlightAttendant:
     cpf = faker.cpf()
     age = random.randint(22, 55)
     return FlightAttendant(name, cpf, age)
+
+def generate_city_pair():
+    """Retorna uma tupla (origem, destino) com cidades brasileiras diferentes."""
+    origin = faker.city()
+    destination = faker.city()
+    while destination == origin:
+        destination = faker.city()
+    return origin, destination
+
+def generate_flight_id(existing_ids=None):
+    """
+    Gera um ID de voo único aleatório de 4 dígitos.
+    """
+    if existing_ids is None:
+        existing_ids = set()
+
+    while True:
+        flight_id = str(random.randint(1000, 9999))
+        if flight_id not in existing_ids:
+            return flight_id

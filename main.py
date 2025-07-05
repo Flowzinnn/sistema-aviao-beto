@@ -1,12 +1,18 @@
 from Entities.flight import Flight
+from generatorFaker import generate_city_pair, generate_flight_id
 import os
 
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 flights = []
-for i in range(10):
-    flights.append(Flight(str(1000 + i), "São Paulo", "Rio de Janeiro"))
+existing_ids = set()
+
+for _ in range(10):
+    origin, destination = generate_city_pair()
+    flight_id = generate_flight_id(existing_ids)
+    existing_ids.add(flight_id)
+    flights.append(Flight(flight_id, origin, destination))
 
 def main_menu():
     while True:
@@ -68,3 +74,7 @@ def flight_menu(flight):
             break
         else:
             print("Opção inválida.")
+
+if __name__ == "__main__":
+    clear_screen()
+    main_menu()

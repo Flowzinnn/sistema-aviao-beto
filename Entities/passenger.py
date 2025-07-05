@@ -13,5 +13,5 @@ class Passenger(DefaultPeople):
     def flyHistory(self, value):
         self._flyHistory = value
 
-    def tipo(self) -> str:
+    def type(self) -> str:
         return "Passenger"
