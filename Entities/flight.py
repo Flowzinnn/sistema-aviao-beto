@@ -43,7 +43,7 @@ class Flight:
     def crew(self):
         return self._crew
 
-    def _generateSeats(self):
+    def generateSeats(self):
         """
         Gera os assentos do voo, 25 Primeira Classe, 75 Executiva e 150 Econômica.
         """
@@ -60,7 +60,7 @@ class Flight:
         
         return seats
         
-    def _generateCrew(self):
+    def generateCrew(self):
         """
         Gera a tripulação do voo: 1 piloto, 1 copiloto e 2 comissários.
         """
@@ -70,7 +70,7 @@ class Flight:
             "Comissários": [generate_attendant(), generate_attendant()]
         }
 
-    def _fill_passengers(self):
+    def fill_passengers(self):
         for seat in self._seats:
             seat.reserve(generate_passenger())
 
