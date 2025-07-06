@@ -1,6 +1,7 @@
 import random
-from Entities.airplane import Airplane, AirplaneModel
+from Entities.airplane import Airplane
 from Entities.seat import Seat
+from Entities.enums import AirplaneModel, SeatClass
 from generatorFaker import (
     generate_passenger,
     generate_pilot,
@@ -14,8 +15,8 @@ class Flight:
         self._origin = origin
         self._destination = destination
         self._airplane = Airplane(random.choice(list(AirplaneModel)), 250)
-        self._seats = self._generate_seats()
-        self._crew = self._generate_crew()
+        self._seats = self._generateSeats()
+        self._crew = self._generateCrew()
         self._fill_passengers()
 
     @property
@@ -42,10 +43,24 @@ class Flight:
     def crew(self):
         return self._crew
 
-    def _generate_seats(self):
-        return [Seat(str(i + 1), "Econômica") for i in range(250)]
-
-    def _generate_crew(self):
+    def _generateSeats(self):
+        """
+        Gera os assentos do voo, 25 Primeira Classe, 75 Executiva e 150 Econômica.
+        """
+        seats = []
+        
+        # Primeira Classe: assentos 1-25
+        seats.extend([Seat(str(i), SeatClass.FIRST_CLASS.value) for i in range(1, 26)])
+        
+        # Executiva: assentos 26-100  
+        seats.extend([Seat(str(i), SeatClass.EXECUTIVE.value) for i in range(26, 101)])
+        
+        # Econômica: assentos 101-250
+        seats.extend([Seat(str(i), SeatClass.ECONOMIC.value) for i in range(101, 251)])
+        
+        return seats
+        
+    def _generateCrew(self):
         """
         Gera a tripulação do voo: 1 piloto, 1 copiloto e 2 comissários.
         """
