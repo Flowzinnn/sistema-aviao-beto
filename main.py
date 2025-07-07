@@ -66,7 +66,7 @@ def flight_menu(flight):
             seat = flight.get_seat(number)
             if seat:
                 passenger = seat.get_passenger()
-                print(f"FlightID: {flight.flight_id} | Assento: {seat.number} | Classe: {seat.seat_class} | Passageiro: {passenger.name}")
+                print(f"FlightID: {flight.flight_id} | Assento: {seat.number} | Classe: {seat.seatClass} | Passageiro: {passenger.name}")
             else:
                 print("Assento não encontrado.")
         elif option == "0":

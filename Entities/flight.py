@@ -17,7 +17,7 @@ class Flight:
         self._airplane = Airplane(random.choice(list(AirplaneModel)), 250)
         self._seats = self._generateSeats()
         self._crew = self._generateCrew()
-        self._fill_passengers()
+        self._fillPassengers()
 
     @property
     def flight_id(self):
@@ -43,7 +43,7 @@ class Flight:
     def crew(self):
         return self._crew
 
-    def generateSeats(self):
+    def _generateSeats(self):
         """
         Gera os assentos do voo, 25 Primeira Classe, 75 Executiva e 150 Econômica.
         """
@@ -60,7 +60,7 @@ class Flight:
         
         return seats
         
-    def generateCrew(self):
+    def _generateCrew(self):
         """
         Gera a tripulação do voo: 1 piloto, 1 copiloto e 2 comissários.
         """
@@ -70,7 +70,7 @@ class Flight:
             "Comissários": [generate_attendant(), generate_attendant()]
         }
 
-    def fill_passengers(self):
+    def _fillPassengers(self):
         for seat in self._seats:
             seat.reserve(generate_passenger())
 

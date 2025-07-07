@@ -1,7 +1,14 @@
 class Seat:
-    def __init__(self, number: str, seat_class: str):
+    """
+    Representa um assento em um avião.
+    
+    Args:
+        Number: O número do assento.
+        SeatClass: A classe do assento (econômica, executiva, etc.).
+    """
+    def __init__(self, number: str, seatClass: str):
         self._number = number
-        self._seat_class = seat_class
+        self._seatClass = seatClass
         self._reserved = False
         self._passenger = None
 
@@ -10,8 +17,8 @@ class Seat:
         return self._number
 
     @property
-    def seat_class(self):
-        return self._seat_class
+    def seatClass(self):
+        return self._seatClass
 
     @property
     def reserved(self):
