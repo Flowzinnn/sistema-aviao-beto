@@ -1,7 +1,7 @@
 import random
-from Entities.airplane import Airplane
-from Entities.seat import Seat
-from Entities.enums import AirplaneModel, SeatClass
+from Entities.Airplane import Airplane
+from Entities.Seat import Seat
+from Entities.Enums import AirplaneModel, SeatClass
 from generatorFaker import (
     generate_passenger,
     generate_pilot,

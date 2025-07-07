@@ -1,7 +1,7 @@
 from faker import Faker
 import random
-from Entities.passenger import Passenger
-from Entities.crewMember import Pilot, Copilot, FlightAttendant
+from Entities.Passenger import Passenger
+from Entities.CrewMember import Pilot, Copilot, FlightAttendant
 
 faker = Faker("pt_BR")
 

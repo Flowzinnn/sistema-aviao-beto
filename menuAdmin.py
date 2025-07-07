@@ -1,4 +1,4 @@
-from Entities.flight import Flight
+from Entities.Flight import Flight
 from generatorFaker import generate_city_pair, generate_flight_id
 import os
 
@@ -41,7 +41,11 @@ def select_flight():
         print(flight.get_info())
 
     selected_id = input("\nDigite o ID do voo que deseja visualizar: ")
-    selected_flight = next((f for f in flights if f.flight_id == selected_id), None)
+    selected_flight = None
+    for f in flights:
+        if f.flight_id == selected_id:
+            selected_flight = f
+            break
 
     if selected_flight:
         flight_menu(selected_flight)

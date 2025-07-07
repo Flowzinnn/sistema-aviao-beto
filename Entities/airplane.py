@@ -1,5 +1,5 @@
 from enum import Enum
-from Entities.enums import AirplaneModel
+from Entities.Enums import AirplaneModel
 
 class Airplane:
     def __init__(self, model: AirplaneModel, capacity: int):
