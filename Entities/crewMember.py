@@ -1,4 +1,4 @@
-from Entities.defaultPeople import DefaultPeople
+from Entities.DefaultPeople import DefaultPeople
 
 class CrewMember(DefaultPeople):
     def __init__(self, name: str, cpf: str, age: int, role: str):

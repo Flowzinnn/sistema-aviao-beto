@@ -2,22 +2,22 @@ import random
 from Entities.Airplane import Airplane
 from Entities.Seat import Seat
 from Entities.Enums import AirplaneModel, SeatClass
-from generatorFaker import (
-    generate_passenger,
-    generate_pilot,
-    generate_copilot,
-    generate_attendant
-)
+from GeneratorFaker import GeneratorFaker
+
 
 class Flight:
-    def __init__(self, flight_id: str, origin: str, destination: str):
+    def __init__(self, flight_id: str, origin: str, destination: str, faker: GeneratorFaker):
+        
+        """Inicializa um voo com ID, origem, destino, avião, tripulação e passageiros."""
+
         self._flight_id = flight_id
         self._origin = origin
         self._destination = destination
+        self._faker = faker
         self._airplane = Airplane(random.choice(list(AirplaneModel)), 250)
-        self._seats = self._generateSeats()
-        self._crew = self._generateCrew()
-        self._fillPassengers()
+        self._seats = self.generateSeats()
+        self._crew = self.generateCrew()
+        self.fillPassengers()
 
     @property
     def flight_id(self):
@@ -43,7 +43,7 @@ class Flight:
     def crew(self):
         return self._crew
 
-    def _generateSeats(self):
+    def generateSeats(self):
         """
         Gera os assentos do voo, 25 Primeira Classe, 75 Executiva e 150 Econômica.
         """
@@ -60,19 +60,22 @@ class Flight:
         
         return seats
         
-    def _generateCrew(self):
+    def generateCrew(self):
         """
         Gera a tripulação do voo: 1 piloto, 1 copiloto e 2 comissários.
         """
         return {
-            "Piloto": generate_pilot(),
-            "Copiloto": generate_copilot(),
-            "Comissários": [generate_attendant(), generate_attendant()]
+            "Piloto": self._faker.generate_pilot(),
+            "Copiloto": self._faker.generate_copilot(),
+            "Comissários": [
+                self._faker.generate_attendant(),
+                self._faker.generate_attendant()
+            ]
         }
 
-    def _fillPassengers(self):
+    def fillPassengers(self):
         for seat in self._seats:
-            seat.reserve(generate_passenger())
+            seat.reserve(self._faker.generate_passenger())
 
     def get_info(self):
         return f"{self.flight_id} - {self.origin} → {self.destination} ({self.airplane.model.value})"

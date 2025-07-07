@@ -1,4 +1,4 @@
-from Entities.defaultPeople import DefaultPeople
+from Entities.DefaultPeople import DefaultPeople
 
 class Passenger(DefaultPeople):
     def __init__(self, name: str, CPF: int, age: int):

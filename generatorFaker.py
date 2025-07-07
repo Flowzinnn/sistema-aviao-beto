@@ -3,56 +3,54 @@ import random
 from Entities.Passenger import Passenger
 from Entities.CrewMember import Pilot, Copilot, FlightAttendant
 
-faker = Faker("pt_BR")
+class GeneratorFaker:
+    def __init__(self):
+        """Inicializa o gerador de dados com Faker e configurações brasileiras."""
+        self.faker = Faker("pt_BR")
+        self.existing_ids = set()
 
+    def generate_passenger(self) -> Passenger:
+        """Gera um passageiro com nome, CPF e idade aleatória."""
+        name = self.faker.name()
+        cpf = self.faker.cpf()
+        age = random.randint(18, 80)
+        return Passenger(name, cpf, age)
 
-def generate_passenger() -> Passenger:
-    """Gera um passageiro com nome, CPF e idade aleatória."""
-    name = faker.name()
-    cpf = faker.cpf()
-    age = random.randint(18, 80)
-    return Passenger(name, cpf, age)
+    def generate_pilot(self) -> Pilot:
+        """Gera um piloto com nome, CPF e idade aleatória."""
+        name = self.faker.name_male()
+        cpf = self.faker.cpf()
+        age = random.randint(35, 65)
+        return Pilot(name, cpf, age)
 
+    def generate_copilot(self) -> Copilot:
+        """Gera um copiloto com nome, CPF e idade aleatória."""
+        name = self.faker.name_male()
+        cpf = self.faker.cpf()
+        age = random.randint(30, 60)
+        return Copilot(name, cpf, age)
 
-def generate_pilot() -> Pilot:
-    """Gera um piloto com nome, CPF e idade aleatória."""
-    name = faker.name_male()
-    cpf = faker.cpf()
-    age = random.randint(35, 65)
-    return Pilot(name, cpf, age)
+    def generate_attendant(self) -> FlightAttendant:
+        """Gera um comissário de bordo com nome, CPF e idade aleatória."""
+        name = self.faker.name_female()
+        cpf = self.faker.cpf()
+        age = random.randint(22, 55)
+        return FlightAttendant(name, cpf, age)
 
+    def generate_city_pair(self):
+        """Retorna uma tupla (origem, destino) com cidades brasileiras diferentes."""
+        origin = self.faker.city()
+        destination = self.faker.city()
+        while destination == origin:
+            destination = self.faker.city()
+        return origin, destination
 
-def generate_copilot() -> Copilot:
-    """Gera um copiloto com nome, CPF e idade aleatória."""
-    name = faker.name_male()
-    cpf = faker.cpf()
-    age = random.randint(30, 60)
-    return Copilot(name, cpf, age)
-
-
-def generate_attendant() -> FlightAttendant:
-    """Gera um comissário de bordo com nome, CPF e idade aleatória."""
-    name = faker.name_female()
-    cpf = faker.cpf()
-    age = random.randint(22, 55)
-    return FlightAttendant(name, cpf, age)
-
-def generate_city_pair():
-    """Retorna uma tupla (origem, destino) com cidades brasileiras diferentes."""
-    origin = faker.city()
-    destination = faker.city()
-    while destination == origin:
-        destination = faker.city()
-    return origin, destination
-
-def generate_flight_id(existing_ids=None):
-    """
-    Gera um ID de voo único aleatório de 4 dígitos.
-    """
-    if existing_ids is None:
-        existing_ids = set()
-
-    while True:
-        flight_id = str(random.randint(1000, 9999))
-        if flight_id not in existing_ids:
-            return flight_id
+    def generate_flight_id(self):
+        """
+        Gera um ID de voo único aleatório de 4 dígitos.
+        """
+        while True:
+            flight_id = str(random.randint(1000, 9999))
+            if flight_id not in self.existing_ids:
+                self.existing_ids.add(flight_id)
+                return flight_id
