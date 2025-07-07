@@ -7,7 +7,8 @@ Um sistema completo de gerenciamento de voos desenvolvido em Python, permitindo 
 - **Gerenciamento de Voos**: Visualização de voos disponíveis com origem e destino
 - **Informações da Tripulação**: Visualização completa do piloto, copiloto e comissários de bordo
 - **Detalhes da Aeronave**: Informações sobre o modelo do avião utilizado
-- **Sistema de Assentos**: Consulta de assentos específicos e seus passageiros
+- **Sistema de Assentos**: Consulta de assentos específicos com diferentes classes (Primeira Classe, Executiva, Econômica)
+- **Classes de Assentos**: Sistema dividido em 25 assentos Primeira Classe, 75 Executiva e 150 Econômica
 - **Geração Automática de Dados**: Criação automática de voos, passageiros e tripulação usando dados fictícios
 
 ## 🚀 Como Executar
@@ -27,18 +28,20 @@ python main.py
 ```
 sistema-aviao-beto/
 │
-├── main.py                    # Arquivo principal com interface do usuário
-├── generatorFaker.py          # Geração de dados fictícios
+├── main.py                    # Arquivo principal (entry point)
+├── MenuAdmin.py               # Interface do usuário e menus
+├── GeneratorFaker.py          # Geração de dados fictícios com Faker
 ├── README.md                  # Documentação do projeto
 │
 └── Entities/                  # Entidades do sistema
     ├── __init__.py
-    ├── airplane.py            # Classe Airplane e enum AirplaneModel
-    ├── crewMember.py          # Classes Pilot, Copilot, FlightAttendant
-    ├── defaultPeople.py       # Classe abstrata DefaultPeople
-    ├── flight.py              # Classe Flight (voo)
-    ├── passenger.py           # Classe Passenger
-    └── seat.py                # Classe Seat (assento)
+    ├── Enums.py               # Enums: SeatClass, AirplaneModel, CrewRole
+    ├── Airplane.py            # Classe Airplane
+    ├── CrewMember.py          # Classes Pilot, Copilot, FlightAttendant
+    ├── DefaultPeople.py       # Classe abstrata DefaultPeople
+    ├── Flight.py              # Classe Flight (voo)
+    ├── Passenger.py           # Classe Passenger
+    └── Seat.py                # Classe Seat (assento)
 ```
 
 ## 🎯 Exemplos de Uso
@@ -109,8 +112,15 @@ Modelo do avião: Airbus A330
 Exemplo de output:
 ```
 === Voo 5669 ===
-FlightID: 5669 | Assento: 245 | Passageiro: Ana Beatriz Pires
+FlightID: 5669 | Assento: 1 | Classe: Primeira Classe | Passageiro: Ana Beatriz Pires
 ```
+
+### Distribuição dos Assentos
+
+O sistema possui 250 assentos distribuídos em três classes:
+- **Primeira Classe**: Assentos 1-25 (25 assentos)
+- **Executiva**: Assentos 26-100 (75 assentos)  
+- **Econômica**: Assentos 101-250 (150 assentos)
 
 ## 🏗️ Arquitetura do Sistema
 
@@ -138,29 +148,58 @@ FlightID: 5669 | Assento: 245 | Passageiro: Ana Beatriz Pires
 #### `Seat`
 - Representa um assento no avião
 - Pode ser reservado para um passageiro
-- Possui classe do assento (Econômica, etc.)
+- Possui classe do assento (Primeira Classe, Executiva, Econômica)
+- Distribuição: 25 Primeira Classe + 75 Executiva + 150 Econômica
 
 #### `Flight`
 - Classe principal que gerencia um voo
 - Contém: ID, origem, destino, avião, assentos, tripulação
-- Gera automaticamente passageiros e tripulação
+- Gera automaticamente passageiros e tripulação usando GeneratorFaker
+- Distribui assentos em diferentes classes automaticamente
+
+#### `GeneratorFaker`
+- Classe responsável pela geração de dados fictícios
+- Utiliza a biblioteca Faker para criar dados realistas
+- Gera passageiros, tripulação, cidades e IDs únicos
+
+#### `AdminMenu`
+- Interface principal do sistema
+- Gerencia navegação entre menus
+- Controla interação com o usuário
+
+#### `Enums`
+- **SeatClass**: Enum para classes de assento (Econômica, Executiva, Primeira Classe)
+- **AirplaneModel**: Enum para modelos de aeronaves
+- **CrewRole**: Enum para funções da tripulação
 
 ## 🛠️ Tecnologias Utilizadas
 
 - **Python 3.x**
-- **Faker**: Biblioteca para geração de dados fictícios
-- **Enum**: Para modelagem de tipos de aeronaves
+- **Faker**: Biblioteca para geração de dados fictícios brasileiros
+- **Enum**: Para modelagem de tipos de aeronaves e classes de assentos
 - **ABC (Abstract Base Classes)**: Para classes abstratas
+- **POO**: Aplicação completa de conceitos de Programação Orientada a Objetos
 
 ## 🔧 Funcionalidades Técnicas
 
 ### Geração Automática de Dados
-O sistema utiliza a biblioteca Faker para gerar:
-- Nomes de passageiros e tripulantes
-- CPFs válidos
-- Idades aleatórias
-- Cidades de origem e destino
-- IDs únicos de voos
+O sistema utiliza a biblioteca Faker configurada para o Brasil (pt_BR) para gerar:
+- Nomes de passageiros e tripulantes brasileiros
+- CPFs válidos no formato brasileiro
+- Idades aleatórias apropriadas para cada tipo de pessoa
+- Cidades brasileiras de origem e destino
+- IDs únicos de voos de 4 dígitos
+
+### Classes de Assentos
+- **Primeira Classe**: Assentos 1-25 (25 assentos premium)
+- **Executiva**: Assentos 26-100 (75 assentos business)
+- **Econômica**: Assentos 101-250 (150 assentos padrão)
+
+### Arquitetura Orientada a Objetos
+- Herança: `DefaultPeople` → `Passenger`, `CrewMember`
+- Composição: `Flight` contém `Airplane`, `Seat[]`, `CrewMember[]`
+- Enums: Para garantir type safety e constantes
+- Properties: Encapsulamento com getters/setters pythônicos
 
 ### Modelos de Aeronaves Disponíveis
 - Boeing 737, 747, 777, 787 Dreamliner
@@ -168,8 +207,16 @@ O sistema utiliza a biblioteca Faker para gerar:
 - Embraer E190, E195
 
 ### Validações
-- IDs de voos únicos
-- Validação de entrada do usuário
+- IDs de voos únicos (4 dígitos)
+- Validação de entrada do usuário nos menus
+- Verificação de assentos existentes
+- Prevenção de reservas duplicadas
+
+### Padrões de Código
+- **PascalCase**: Para nomes de classes (`Flight`, `GeneratorFaker`)
+- **camelCase**: Para métodos e propriedades (`generateSeats`, `seatClass`)
+- **snake_case**: Para atributos privados (`_flight_id`, `_seats`)
+- **Type Hints**: Para melhor documentação e IDE support
 
 ## 👥 Contribuição
 
