@@ -1,17 +1,23 @@
 from Entities.DefaultPeople import DefaultPeople
 
 class Passenger(DefaultPeople):
+    """
+    Representa um passageiro no sistema de voos.
+    
+    Herda de DefaultPeople e adiciona funcionalidades específicas para passageiros,
+    como histórico de voos e métodos relacionados a viagens.
+    
+    Example:
+        >>> passenger = Passenger("João Silva", "12345678900", 30)
+        >>> passenger.name
+        'João Silva'
+        >>> passenger.type()
+        'Passenger'
+    """
+    
     def __init__(self, name: str, CPF: int, age: int):
         super().__init__(name, CPF, age)
-        self._flyHistory = []
 
     @property
-    def flyHistory(self):
-        return self._flyHistory
-
-    @flyHistory.setter
-    def flyHistory(self, value):
-        self._flyHistory = value
-
     def type(self) -> str:
         return "Passenger"
