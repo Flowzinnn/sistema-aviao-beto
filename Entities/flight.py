@@ -42,6 +42,10 @@ class Flight:
     @property
     def crew(self):
         return self._crew
+    
+    @property
+    def airplane_model(self):
+        return self.airplane.model.value
 
     def generateSeats(self):
         """
@@ -74,17 +78,31 @@ class Flight:
         }
 
     def fillPassengers(self):
-        for seat in self._seats:
-            seat.reserve(self._faker.generate_passenger())
+        """
+        Preenche automaticamente alguns assentos com passageiros.
+        Agora usa o BookingSystem para manter a consistência.
+        """
+        # Importação local para evitar dependência circular
+        from BookingSystem import BookingSystem
+        
+        booking_system = BookingSystem()
+        
+        # Preenche apenas 80% dos assentos para deixar alguns livres
+        seats_to_fill = int(len(self._seats) * 0.8)
+        
+        for i in range(seats_to_fill):
+            seat = self._seats[i]
+            if not seat.is_reserved():
+                passenger = self._faker.generate_passenger()
+                try:
+                    booking_system.book_seat(self, seat.number, passenger)
+                except ValueError:
+                    # Assento já reservado, pular
+                    continue
 
     def get_info(self):
-        return f"{self.flight_id} - {self.origin} → {self.destination} ({self.airplane.model.value})"
+        return f"{self.flight_id} - {self.origin} → {self.destination} ({self.airplane_model})"
 
-    def get_airplane_model(self):
-        return self.airplane.model.value
-
-    def get_crew(self):
-        return self.crew
 
     def get_seat(self, number: str):
         for seat in self.seats:

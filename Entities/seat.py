@@ -24,16 +24,39 @@ class Seat:
     def reserved(self):
         return self._reserved
 
-    def reserve(self, passenger):
+    def is_reserved(self) -> bool:
         """
-        Reserva o assento para um passageiro.
+        Verifica se o assento está reservado.
+        
+        Returns:
+            True se reservado, False caso contrário
         """
-        if self._reserved:
-            raise ValueError(f"Assento {self._number} já está reservado.")
+        return self._reserved
+
+    def assign_passenger(self, passenger):
+        """
+        Atribui um passageiro ao assento (método interno usado pelo BookingSystem).
+        
+        Args:
+            passenger: Passageiro a ser atribuído
+        """
         self._passenger = passenger
         self._reserved = True
 
+    def release_seat(self):
+        """
+        Libera o assento (método interno usado pelo BookingSystem).
+        """
+        self._passenger = None
+        self._reserved = False
+
     def get_passenger(self):
+        """
+        Retorna o passageiro do assento.
+        
+        Returns:
+            Passageiro atribuído ao assento ou None se livre
+        """
         return self._passenger
 
     def __str__(self):
