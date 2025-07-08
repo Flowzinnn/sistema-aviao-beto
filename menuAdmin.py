@@ -7,9 +7,6 @@ from MenuBooking import BookingMenu
 
 class AdminMenu:
     def __init__(self):
-        """
-        Inicializa o menu do administrador e cria os voos com dados gerados pelo Faker.
-        """
         self._faker = GeneratorFaker()
         self._flights = []
         self._booking_system = BookingSystem()
@@ -26,18 +23,18 @@ class AdminMenu:
 
     def start(self):
         self.clear_screen()
-        self._main_menu()
+        self.main_menu()
 
-    def _main_menu(self):
+    def main_menu(self):
         while True:
-            print("=== Menu Principal ===")
+            print("MENU PRINCIPAL")
             print("1 - Menu Administrador")
             print("2 - Sistema de Reservas")
             print("0 - Sair")
-            option = input("Escolha uma opção: ")
+            option = input("Digite sua opcao: ")
 
             if option == "1":
-                self._admin_menu()
+                self.admin_menu()
             elif option == "2":
                 booking_menu = BookingMenu(self._flights, self._booking_system)
                 booking_menu.start()
@@ -45,29 +42,32 @@ class AdminMenu:
                 print("Saindo do sistema...")
                 break
             else:
-                print("Opção inválida!")
+                print("Opcao invalida!")
+                input("Pressione Enter para continuar...")
 
-    def _admin_menu(self):
+    def admin_menu(self):
         while True:
-            print("\n=== Menu Administrador ===")
-            print("1 - Ver voos disponíveis")
+            self.clear_screen()
+            print("MENU ADMINISTRADOR")
+            print("1 - Ver voos disponiveis")
             print("0 - Voltar")
-            option = input("Escolha uma opção: ")
+            option = input("Digite sua opcao: ")
 
             if option == "1":
-                self.clear_screen()
-                self._select_flight()
+                self.select_flight()
             elif option == "0":
                 break
             else:
-                print("Opção inválida!")
+                print("Opcao invalida!")
+                input("Pressione Enter para continuar...")
 
-    def _select_flight(self):
-        print("=== Voos Disponíveis ===")
+    def select_flight(self):
+        self.clear_screen()
+        print("VOOS DISPONIVEIS")
         for flight in self._flights:
-            print(flight.get_info())
+            print(flight)
 
-        selected_id = input("\nDigite o ID do voo que deseja visualizar: ")
+        selected_id = input("Digite o ID do voo: ")
         selected_flight = None
         for f in self._flights:
             if f.flight_id == selected_id:
@@ -75,61 +75,60 @@ class AdminMenu:
                 break
 
         if selected_flight:
-            self._flight_menu(selected_flight)
+            self.flight_menu(selected_flight)
         else:
-            print("Voo não encontrado.")
+            print("Voo nao encontrado!")
+            input("Pressione Enter para continuar...")
 
-    def _flight_menu(self, flight):
+    def flight_menu(self, flight):
         while True:
-            print(f"\n=== Voo {flight.flight_id} ===")
-            print("1 - Ver tripulação")
-            print("2 - Ver modelo do avião")
-            print("3 - Ver assento específico")
+            self.clear_screen()
+            print(f"VOO {flight.flight_id}")
+            print("1 - Ver tripulacao")
+            print("2 - Ver modelo do aviao")
+            print("3 - Ver assento especifico")
             print("0 - Voltar")
-
-            option = input("Escolha uma opção: ")
+            option = input("Digite sua opcao: ")
 
             if option == "1":
-                self._show_crew_menu(flight)
+                self.show_crew_menu(flight)
             elif option == "2":
-                print(f"\nModelo do avião: {flight.airplane_model}")
+                print(f"Modelo do aviao: {flight.airplane_model}")
+                input("Pressione Enter para continuar...")
             elif option == "3":
-                number = input("Digite o número do assento: ")
+                number = input("Digite o numero do assento: ")
                 seat = flight.get_seat(number)
                 if seat:
                     passenger = seat.get_passenger()
                     if passenger:
-                        print(f"FlightID: {flight.flight_id} | Assento: {seat.number} | Classe: {seat.seatClass} | Passageiro: {passenger.name}")
+                        print(f"Assento: {seat.number} | Classe: {seat.seatClass} | Passageiro: {passenger.name}")
                     else:
-                        print(f"FlightID: {flight.flight_id} | Assento: {seat.number} | Classe: {seat.seatClass} | Status: LIVRE")
+                        print(f"Assento: {seat.number} | Classe: {seat.seatClass} | Status: LIVRE")
                 else:
-                    print("Assento não encontrado.")
+                    print("Assento nao encontrado.")
+                input("Pressione Enter para continuar...")
             elif option == "0":
-                self.clear_screen()
                 break
             else:
-                print("Opção inválida!")
+                print("Opcao invalida!")
+                input("Pressione Enter para continuar...")
 
-    def _show_crew_menu(self, flight):
-        """
-        Mostra o menu da tripulação com opções para ver informações públicas.
-        """
+    def show_crew_menu(self, flight):
         crew = flight.crew
         crew_list = []
         
-        # Criar lista ordenada da tripulação
         crew_list.append(("Piloto", crew['Piloto']))
         crew_list.append(("Copiloto", crew['Copiloto']))
         for i, attendant in enumerate(crew["Comissários"], start=1):
-            crew_list.append((f"Comissário {i}", attendant))
+            crew_list.append((f"Comissario {i}", attendant))
         
         while True:
-            print(f"\n=== Tripulação do Voo {flight.flight_id} ===")
+            self.clear_screen()
+            print(f"TRIPULACAO DO VOO {flight.flight_id}")
             for i, (role, member) in enumerate(crew_list, start=1):
                 print(f"{i} - {role}: {member.name}")
             print("0 - Voltar")
-            
-            option = input("\nEscolha um tripulante para ver informações públicas: ")
+            option = input("Escolha um tripulante: ")
             
             if option == "0":
                 break
@@ -137,19 +136,18 @@ class AdminMenu:
                 index = int(option) - 1
                 if 0 <= index < len(crew_list):
                     role, member = crew_list[index]
-                    self._show_crew_member_info(role, member)
+                    self.show_crew_member_info(role, member)
                 else:
-                    print("Opção inválida!")
+                    print("Opcao invalida!")
+                    input("Pressione Enter para continuar...")
             else:
-                print("Opção inválida!")
+                print("Opcao invalida!")
+                input("Pressione Enter para continuar...")
 
-    def _show_crew_member_info(self, role, member):
-        """
-        Mostra as informações públicas de um tripulante.
-        """
-        print(f"\n=== Informações Públicas - {role} ===")
+    def show_crew_member_info(self, role, member):
+        print("INFORMACOES DO TRIPULANTE")
         print(f"Nome: {member.name}")
         print(f"Idade: {member.age}")
-        print(f"Função: {member.role}")
+        print(f"Funcao: {member.role}")
         print(f"Tipo: {member.type()}")
-        input("\nPressione Enter para continuar...")
+        input("Pressione Enter para continuar...")

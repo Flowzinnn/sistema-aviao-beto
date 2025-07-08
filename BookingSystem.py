@@ -4,6 +4,7 @@ from typing import Dict, Optional
 from Entities.Flight import Flight
 from Entities.Passenger import Passenger
 from Entities.Seat import Seat
+from Entities.PlaneTicket import PlaneTicket
 
 
 class BookingSystem:
@@ -13,7 +14,7 @@ class BookingSystem:
     """
     
     def __init__(self):
-        self._reservations: Dict[str, Dict] = {}
+        self._tickets: Dict[str, PlaneTicket] = {}
         self._booking_counter = 100000
 
     def book_seat(self, flight: Flight, seat_number: str, passenger: Passenger) -> str:
@@ -45,14 +46,9 @@ class BookingSystem:
         # Efetua a reserva
         seat.assign_passenger(passenger)
         
-        # Armazena informações da reserva
-        self._reservations[booking_code] = {
-            'flight': flight,
-            'seat': seat,
-            'passenger': passenger,
-            'booking_date': datetime.now(),
-            'status': 'CONFIRMADO'
-        }
+        # Cria o bilhete
+        ticket = PlaneTicket(booking_code, flight, seat, passenger)
+        self._tickets[booking_code] = ticket
         
         return booking_code
 
@@ -66,21 +62,15 @@ class BookingSystem:
         Returns:
             True se cancelada com sucesso, False se não encontrada
         """
-        if booking_code not in self._reservations:
+        if booking_code not in self._tickets:
             return False
         
-        reservation = self._reservations[booking_code]
-        seat = reservation['seat']
-        
-        # Libera o assento
-        seat._release_seat()
-        
-        # Atualiza status da reserva
-        reservation['status'] = 'CANCELADO'
+        ticket = self._tickets[booking_code]
+        ticket.cancel_ticket()
         
         return True
 
-    def get_booking(self, booking_code: str) -> Optional[Dict]:
+    def get_booking(self, booking_code: str) -> Optional[PlaneTicket]:
         """
         Recupera informações de uma reserva.
         
@@ -88,9 +78,9 @@ class BookingSystem:
             booking_code: Código da reserva
             
         Returns:
-            Dicionário com informações da reserva ou None se não encontrada
+            Bilhete ou None se não encontrado
         """
-        return self._reservations.get(booking_code)
+        return self._tickets.get(booking_code)
 
     def get_available_seats(self, flight: Flight, seat_class: str = None) -> list[Seat]:
         """
@@ -110,7 +100,7 @@ class BookingSystem:
         
         return available_seats
 
-    def get_passenger_bookings(self, passenger_name: str) -> list[Dict]:
+    def get_passenger_bookings(self, passenger_name: str) -> list[PlaneTicket]:
         """
         Retorna todas as reservas de um passageiro.
         
@@ -118,21 +108,15 @@ class BookingSystem:
             passenger_name: Nome do passageiro
             
         Returns:
-            Lista de reservas do passageiro
+            Lista de bilhetes do passageiro
         """
-        passenger_bookings = []
+        passenger_tickets = []
         
-        for booking_code, reservation in self._reservations.items():
-            if reservation['passenger'].name == passenger_name and reservation['status'] == 'CONFIRMADO':
-                passenger_bookings.append({
-                    'booking_code': booking_code,
-                    'flight_id': reservation['flight'].flight_id,
-                    'seat_number': reservation['seat'].number,
-                    'seat_class': reservation['seat'].seatClass,
-                    'booking_date': reservation['booking_date']
-                })
+        for ticket in self._tickets.values():
+            if ticket.passenger.name == passenger_name and ticket.is_active():
+                passenger_tickets.append(ticket)
         
-        return passenger_bookings
+        return passenger_tickets
 
     def generate_booking_code(self) -> str:
         """
@@ -151,9 +135,9 @@ class BookingSystem:
         Returns:
             Dicionário com estatísticas
         """
-        total_bookings = len(self._reservations)
-        active_bookings = len([r for r in self._reservations.values() if r['status'] == 'CONFIRMADO'])
-        cancelled_bookings = len([r for r in self._reservations.values() if r['status'] == 'CANCELADO'])
+        total_bookings = len(self._tickets)
+        active_bookings = len([t for t in self._tickets.values() if t.is_active()])
+        cancelled_bookings = len([t for t in self._tickets.values() if not t.is_active()])
         
         return {
             'total_bookings': total_bookings,

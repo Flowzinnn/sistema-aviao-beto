@@ -1,4 +1,5 @@
 import random
+from typing import Optional
 from Entities.Airplane import Airplane
 from Entities.Seat import Seat
 from Entities.Enums import AirplaneModel, SeatClass
@@ -14,13 +15,17 @@ class Flight:
         self._origin = origin
         self._destination = destination
         self._faker = faker
-        self._airplane = Airplane(random.choice(list(AirplaneModel)), 250)
+        self._airplane = Airplane(random.choice(list(AirplaneModel)))
         self._seats = self.generateSeats()
+        self._seat_map = {seat.number: seat for seat in self._seats}  # Cache para busca O(1)
         self._crew = self.generateCrew()
         self.fillPassengers()
+        
+    def __str__(self):
+        return f"FlightID:({self._flight_id}) <> Voo de {self._origin} com destino à {self._destination} <> Avião: {self.airplane_model}"
 
     @property
-    def flight_id(self):
+    def flight_id(self):    
         return self._flight_id
 
     @property
@@ -49,18 +54,26 @@ class Flight:
 
     def generateSeats(self):
         """
-        Gera os assentos do voo, 25 Primeira Classe, 75 Executiva e 150 Econômica.
+        Gera os assentos do voo baseado na capacidade real do avião.
         """
         seats = []
+        distribution = self._airplane.get_seat_distribution()
+        seat_number = 1
         
-        # Primeira Classe: assentos 1-25
-        seats.extend([Seat(str(i), SeatClass.FIRST_CLASS.value) for i in range(1, 26)])
+        # Primeira Classe
+        for i in range(distribution['first_class']):
+            seats.append(Seat(str(seat_number), SeatClass.FIRST_CLASS.value))
+            seat_number += 1
         
-        # Executiva: assentos 26-100  
-        seats.extend([Seat(str(i), SeatClass.EXECUTIVE.value) for i in range(26, 101)])
+        # Executiva
+        for i in range(distribution['executive']):
+            seats.append(Seat(str(seat_number), SeatClass.EXECUTIVE.value))
+            seat_number += 1
         
-        # Econômica: assentos 101-250
-        seats.extend([Seat(str(i), SeatClass.ECONOMIC.value) for i in range(101, 251)])
+        # Econômica
+        for i in range(distribution['economic']):
+            seats.append(Seat(str(seat_number), SeatClass.ECONOMIC.value))
+            seat_number += 1
         
         return seats
         
@@ -101,11 +114,9 @@ class Flight:
                     continue
 
     def get_info(self):
-        return f"{self.flight_id} - {self.origin} → {self.destination} ({self.airplane_model})"
+        return f" {self.origin} → {self.destination} ({self.airplane_model})"
 
 
-    def get_seat(self, number: str):
-        for seat in self.seats:
-            if seat.number == number:
-                return seat
-        return None
+    def get_seat(self, number: str) -> Optional[Seat]:
+        """ Args: Number: Número do assento; Tipo string"""
+        return self._seat_map.get(number)
