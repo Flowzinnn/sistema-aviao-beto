@@ -2,24 +2,27 @@ import random
 from typing import Optional
 from Entities.Airplane import Airplane
 from Entities.Seat import Seat
-from Entities.Enums import AirplaneModel, SeatClass
+from Entities.Enums import AirplaneModel, SeatClass, CrewRole
 from GeneratorFaker import GeneratorFaker
 
 
 class Flight:
-    def __init__(self, flight_id: str, origin: str, destination: str, faker: GeneratorFaker):
-        
-        """Inicializa um voo com ID, origem, destino, avião, tripulação e passageiros."""
+    
+    """
+    Inicializa um voo com ID, origem, destino, avião, tripulação e passageiros.
+    """
 
+    def __init__(self, flight_id: str, origin: str, destination: str, faker: GeneratorFaker):
         self._flight_id = flight_id
         self._origin = origin
         self._destination = destination
         self._faker = faker
         self._airplane = Airplane(random.choice(list(AirplaneModel)))
         self._seats = self.generateSeats()
-        self._seat_map = {seat.number: seat for seat in self._seats}  # Cache para busca O(1)
+        self._seat_map = {seat.number: seat for seat in self._seats}
         self._crew = self.generateCrew()
         self.fillPassengers()
+        
         
     def __str__(self):
         return f"FlightID:({self._flight_id}) <> Voo de {self._origin} com destino à {self._destination} <> Avião: {self.airplane_model}"
@@ -82,8 +85,8 @@ class Flight:
         Gera a tripulação do voo: 1 piloto, 1 copiloto e 2 comissários.
         """
         return {
-            "Piloto": self._faker.generate_pilot(),
-            "Copiloto": self._faker.generate_copilot(),
+            CrewRole.PILOT.value: self._faker.generate_pilot(),
+            CrewRole.COPILOT.value: self._faker.generate_copilot(),
             "Comissários": [
                 self._faker.generate_attendant(),
                 self._faker.generate_attendant()

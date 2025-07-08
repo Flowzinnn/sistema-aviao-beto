@@ -1,6 +1,12 @@
 from Entities.DefaultPeople import DefaultPeople
+from Entities.Enums import CrewRole
 
 class CrewMember(DefaultPeople):
+    
+    """
+    Representa um tripulante no sistema de voos.
+    """
+    
     def __init__(self, name: str, cpf: str, age: int, role: str):
         super().__init__(name, cpf, age)
         self._role = role
@@ -18,16 +24,16 @@ class CrewMember(DefaultPeople):
 class Pilot(CrewMember):
     def __init__(self, name: str, cpf: str, age: int) -> None:
         """Cria um Piloto."""
-        super().__init__(name, cpf, age, "Pilot")
+        super().__init__(name, cpf, age, CrewRole.PILOT.value)
 
 
 class Copilot(CrewMember):
     def __init__(self, name: str, cpf: str, age: int) -> None:
         """Cria um Copiloto."""
-        super().__init__(name, cpf, age, "Copilot")
+        super().__init__(name, cpf, age, CrewRole.COPILOT.value)
 
 
 class FlightAttendant(CrewMember):
     def __init__(self, name: str, cpf: str, age: int) -> None:
         """Cria um Comissário de bordo."""
-        super().__init__(name, cpf, age, "Flight Attendant")
+        super().__init__(name, cpf, age, CrewRole.FLIGHT_ATTENDANT.value)

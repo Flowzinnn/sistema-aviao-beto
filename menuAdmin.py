@@ -1,5 +1,6 @@
 import os
 from Entities.Flight import Flight
+from Entities.Enums import CrewRole
 from GeneratorFaker import GeneratorFaker
 from BookingSystem import BookingSystem
 from MenuBooking import BookingMenu
@@ -117,8 +118,8 @@ class AdminMenu:
         crew = flight.crew
         crew_list = []
         
-        crew_list.append(("Piloto", crew['Piloto']))
-        crew_list.append(("Copiloto", crew['Copiloto']))
+        crew_list.append((CrewRole.PILOT.value, crew[CrewRole.PILOT.value]))
+        crew_list.append((CrewRole.COPILOT.value, crew[CrewRole.COPILOT.value]))
         for i, attendant in enumerate(crew["Comissários"], start=1):
             crew_list.append((f"Comissario {i}", attendant))
         
