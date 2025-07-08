@@ -10,7 +10,7 @@ from Entities.PlaneTicket import PlaneTicket
 class BookingSystem:
     """
     Sistema de reservas responsável por gerenciar todas as operações de booking.
-    Segue o princípio Single Responsibility - apenas cuida das reservas.
+
     """
     
     def __init__(self):
